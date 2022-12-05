@@ -5,7 +5,7 @@
   become_user: root
   pre_tasks:
 
-  - name: update repository inder (CentOS)
+  - name: update repository index (CentOS)
     tags: always
     dnf:
       update_cache: yes
@@ -19,7 +19,34 @@
     changed_when: false
     when: ansible_distribution == "Ubuntu"
 
-- hosts: all
-  become: true
-  roles:
-    - install
+
+  tasks:
+    - name: Install ntp client package
+      apt:
+        name=ntp
+        state=present
+
+    - name: Install openstack packages
+      apt:
+        name=nova-compute
+        state=present
+
+    - name: Install SQL database
+      apt:
+        name=mysql-server
+        state=present
+
+    - name: Install message queue
+      apt:
+        name=rabbitmq-server
+        state=present
+
+    - name: Install memcached
+      apt:
+        name=memcached
+        state=present
+
+    - name: Install etcd
+      apt:
+        name=etcd
+        state=present
